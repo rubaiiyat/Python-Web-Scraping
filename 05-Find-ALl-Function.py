@@ -8,6 +8,11 @@ url = requests.get(
 soup = BeautifulSoup(url.text, "lxml")
 
 fnd = soup.find_all("h4", class_="price")
+title = soup.find_all("a", class_="title")
 
 for f in fnd:
     print(f.text)
+
+
+for t in title:
+    print(t.text)
