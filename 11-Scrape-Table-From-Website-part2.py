@@ -22,7 +22,7 @@ for r in rows[1:]:
     data = r.find_all("td")
     row = [tr.text.strip() for tr in data]
 
-    df.loc[len(df)] = data
+    df.loc[len(df)] = row
 
 
 print(df)
