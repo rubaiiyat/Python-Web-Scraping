@@ -12,6 +12,11 @@ for i in range(2, 11):
 
     soup = BeautifulSoup(url.text, "lxml")
 
+    """ if url.status_code == 200:
+        print(
+            f"https://www.flipkart.com/search?q=acoustic%20guitar&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page={i}"
+        ) """
+
     if url.status_code == 200:
         np = soup.find("a", class_="_9QVEpD").get("href")
         nextPage = "https://www.flipkart.com" + np
