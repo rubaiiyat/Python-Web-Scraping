@@ -38,3 +38,8 @@ stock = soup.find("th", string="Availability")
 available = stock.find_next_sibling().text
 availability = "".join([char for char in available if char.isdigit()])
 print(availability)
+
+
+imgMain = soup.find("div", class_="item active").img["src"]
+
+print("https://books.toscrape.com/" + imgMain[6:])
