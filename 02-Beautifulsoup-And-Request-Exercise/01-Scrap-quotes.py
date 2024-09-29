@@ -1,28 +1,39 @@
 import requests
 from bs4 import BeautifulSoup
-
+import pandas as pd
 
 quotes = {"content": [], "author": [], "category": []}
 
-url = requests.get("https://quotes.toscrape.com/page/1/")
 
-soup = BeautifulSoup(url.text, "html.parser")
+page = 1
+while True:
+    print("---", page, "--->", end=" ")
+    url = requests.get(f"https://quotes.toscrape.com/page/{page}/")
+    soup = BeautifulSoup(url.text, "html.parser")
+    mainDiv = soup.find_all("div", class_="quote")
+    print(len(mainDiv))
+
+    next = soup.find("li", class_="next")
+    if next is None:
+        break
+    else:
+        page += 1
+
+    for div in mainDiv:
+        content = div.find("span", class_="text").text
+        quotes["content"].append(content)
+
+        author = div.find("small", class_="author").text
+        quotes["author"].append(author)
+
+        tags = div.find_all("a", class_="tags")
+        tag_list = [tag.text for tag in tags]
+
+        quotes["category"].append(",".join(tag_list))
 
 
-mainDiv = soup.find_all("div", class_="quote")
-print(len(mainDiv))
-for div in mainDiv:
-    content = div.find("span", class_="text").text
-    quotes["content"].append(content)
+df = pd.DataFrame(quotes)
 
-    author = div.find("small", class_="author").text
-    quotes["author"].append(author)
+df.to_csv("Books.csv")
 
-    tags = div.find_all("div", class_="tags")
-    for t in tags:
-        all_tag = t.find_all("a", class_="tag")
-        for tag in all_tag:
-            quotes["category"].append(tag.text)
-
-
-print(quotes)
+print("Perfectly Done")
